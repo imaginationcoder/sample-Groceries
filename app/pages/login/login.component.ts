@@ -1,3 +1,4 @@
+import { Router } from "@angular/router";
 import { Component } from "@angular/core";
 
 import { User } from "../../shared/user/user";
@@ -13,8 +14,7 @@ export class LoginComponent {
     user: User;
     isLoggingIn = true;
 
-    constructor(private userService: UserService) {
-        this.user = new User();
+    constructor(private router: Router, private userService: UserService) {
         this.user = new User();
         this.user.email = "user@nativescript.org";
         this.user.password = "password";
@@ -31,9 +31,15 @@ export class LoginComponent {
             this.signUp();
         }
     }
+
     login() {
-        // TODO: Define
+        this.userService.login(this.user)
+            .subscribe(
+            () => this.router.navigate(["/list"]),
+            (error) => alert("Unfortunately we could not find your account.")
+        );
     }
+
 
     signUp() {
         this.userService.register(this.user)
